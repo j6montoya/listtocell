@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "listtocell"
+version = "0.1.0"
+description = "Convert nested dicts to Excel-style merged cell coordinates"
+readme = "README.md"
+requires-python = ">=3.7"
+license = { text = "MIT" }
+authors = [{ name = "Jonathan Montoya", email = "montoyajonathans@gmail.com" }]
+keywords = ["excel", "spreadsheet", "cells", "table", "headers", "merge"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/j6montoya/listtocell"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/listtocell"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=7.4.4",
+]
