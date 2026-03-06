@@ -21,12 +21,14 @@ result = get_cells({
     "Person": {"Name": "John", "Age": 25},
     "Score": 99,
 })
-# [
-#   {"cell": "A1", "range": "A1:B1", "value": "Person", "column": "Person"},  # merged header
-#   {"cell": "A2", "range": "A2:A2", "value": "John",   "column": "Name"},
-#   {"cell": "B2", "range": "B2:B2", "value": 25,       "column": "Age"},
-#   {"cell": "C1", "range": "C1:C2", "value": 99,       "column": "Score"},   # rowspan
-# ]
+```
+```json
+[
+  {"cell": "A1", "range": "A1:B1", "value": "Person", "column": "Person"},
+  {"cell": "A2", "range": "A2:A2", "value": "John", "column": "Name"},
+  {"cell": "B2", "range": "B2:B2", "value": 25, "column": "Age"},
+  {"cell": "C1", "range": "C1:C2", "value": 99, "column": "Score"}
+]
 ```
 
 Each entry contains:
@@ -44,21 +46,25 @@ Each entry contains:
 
 ```python
 get_cells({"Name": "John", "Age": 25})
-# [
-#   {"cell": "A1", "range": "A1:A1", "value": "John", "column": "Name"},
-#   {"cell": "B1", "range": "B1:B1", "value": 25,     "column": "Age"},
-# ]
+```
+```json
+[
+  {"cell": "A1", "range": "A1:A1", "value": "John", "column": "Name"},
+  {"cell": "B1", "range": "B1:B1", "value": 25, "column": "Age"}
+]
 ```
 
 ### Nested dict — merged parent + child row
 
 ```python
 get_cells({"Person": {"Name": "John", "Age": 25}})
-# [
-#   {"cell": "A1", "range": "A1:B1", "value": "Person", "column": "Person"},  # colspan 2
-#   {"cell": "A2", "range": "A2:A2", "value": "John",   "column": "Name"},
-#   {"cell": "B2", "range": "B2:B2", "value": 25,       "column": "Age"},
-# ]
+```
+```json
+[
+  {"cell": "A1", "range": "A1:B1", "value": "Person", "column": "Person"},
+  {"cell": "A2", "range": "A2:A2", "value": "John", "column": "Name"},
+  {"cell": "B2", "range": "B2:B2", "value": 25, "column": "Age"}
+]
 ```
 
 ### Mixed depth — flat value spans remaining rows
@@ -67,24 +73,28 @@ When a flat value sits alongside nested values, it automatically rowspans to fil
 
 ```python
 get_cells({"Group": {"X": 1, "Y": 2}, "Total": 99})
-# [
-#   {"cell": "A1", "range": "A1:B1", "value": "Group", "column": "Group"},  # colspan 2
-#   {"cell": "A2", "range": "A2:A2", "value": 1,       "column": "X"},
-#   {"cell": "B2", "range": "B2:B2", "value": 2,       "column": "Y"},
-#   {"cell": "C1", "range": "C1:C2", "value": 99,      "column": "Total"},  # rowspan 2
-# ]
+```
+```json
+[
+  {"cell": "A1", "range": "A1:B1", "value": "Group", "column": "Group"},
+  {"cell": "A2", "range": "A2:A2", "value": 1, "column": "X"},
+  {"cell": "B2", "range": "B2:B2", "value": 2, "column": "Y"},
+  {"cell": "C1", "range": "C1:C2", "value": 99, "column": "Total"}
+]
 ```
 
 ### Multiple nesting levels
 
 ```python
 get_cells({"Report": {"Summary": {"Total": 100, "Avg": 50}}})
-# [
-#   {"cell": "A1", "range": "A1:B1", "value": "Report",  "column": "Report"},
-#   {"cell": "A2", "range": "A2:B2", "value": "Summary", "column": "Summary"},
-#   {"cell": "A3", "range": "A3:A3", "value": 100,       "column": "Total"},
-#   {"cell": "B3", "range": "B3:B3", "value": 50,        "column": "Avg"},
-# ]
+```
+```json
+[
+  {"cell": "A1", "range": "A1:B1", "value": "Report", "column": "Report"},
+  {"cell": "A2", "range": "A2:B2", "value": "Summary", "column": "Summary"},
+  {"cell": "A3", "range": "A3:A3", "value": 100, "column": "Total"},
+  {"cell": "B3", "range": "B3:B3", "value": 50, "column": "Avg"}
+]
 ```
 
 ### List as value — expanded like a dict
@@ -93,11 +103,13 @@ Lists are treated as nested structures with integer keys:
 
 ```python
 get_cells({"Tags": ["python", "excel"]})
-# [
-#   {"cell": "A1", "range": "A1:B1", "value": "Tags",   "column": "Tags"},
-#   {"cell": "A2", "range": "A2:A2", "value": "python", "column": 0},
-#   {"cell": "B2", "range": "B2:B2", "value": "excel",  "column": 1},
-# ]
+```
+```json
+[
+  {"cell": "A1", "range": "A1:B1", "value": "Tags", "column": "Tags"},
+  {"cell": "A2", "range": "A2:A2", "value": "python", "column": 0},
+  {"cell": "B2", "range": "B2:B2", "value": "excel", "column": 1}
+]
 ```
 
 ## Use cases
@@ -174,9 +186,13 @@ When writing below existing content (e.g. a title row), shift all row numbers:
 
 ```python
 result = get_cells({"Group": {"X": 1, "Y": 2}}, range_start=3)
-# A3:B3 → Group
-# A4:A4 → X
-# B4:B4 → Y
+```
+```json
+[
+  {"cell": "A3", "range": "A3:B3", "value": "Group", "column": "Group"},
+  {"cell": "A4", "range": "A4:A4", "value": 1, "column": "X"},
+  {"cell": "B4", "range": "B4:B4", "value": 2, "column": "Y"}
+]
 ```
 
 ### Column span (`colspan` / `Span`)
@@ -192,10 +208,14 @@ result = get_cells(
     {"Notes": "see below", "Group": {"X": 1, "Y": 2}},
     colspan={"Notes": 2},
 )
-# A1:B2 → Notes   (2 cols × 2 rows)
-# C1:D1 → Group
-# C2:C2 → X
-# D2:D2 → Y
+```
+```json
+[
+  {"cell": "A1", "range": "A1:B2", "value": "see below", "column": "Notes"},
+  {"cell": "C1", "range": "C1:D1", "value": "Group", "column": "Group"},
+  {"cell": "C2", "range": "C2:C2", "value": 1, "column": "X"},
+  {"cell": "D2", "range": "D2:D2", "value": 2, "column": "Y"}
+]
 ```
 
 **`Span` inline** — keeps the colspan next to the value:
@@ -204,7 +224,14 @@ result = get_cells(
 from listtocell import get_cells, Span
 
 result = get_cells({"Notes": Span("see below", 2), "Group": {"X": 1, "Y": 2}})
-# identical result
+```
+```json
+[
+  {"cell": "A1", "range": "A1:B2", "value": "see below", "column": "Notes"},
+  {"cell": "C1", "range": "C1:D1", "value": "Group", "column": "Group"},
+  {"cell": "C2", "range": "C2:C2", "value": 1, "column": "X"},
+  {"cell": "D2", "range": "D2:D2", "value": 2, "column": "Y"}
+]
 ```
 
 ## API reference
